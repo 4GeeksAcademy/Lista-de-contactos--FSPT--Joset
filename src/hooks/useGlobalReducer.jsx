@@ -11,12 +11,14 @@ const StoreContext = createContext()
 export function StoreProvider({ children }) {
     // Initialize reducer with the initial state.
     const [store, dispatch] = useReducer(storeReducer, initialStore())
+    //store: es donde se almacenan las cosas. Explicacion min 15:00
+    //dispatch: efecto de ejecutar algo. 
     // Provide the store and dispatch method to all child components.
     return <StoreContext.Provider value={{ store, dispatch }}>
         {children}
     </StoreContext.Provider>
 }
-
+ 
 // Custom hook to access the global state and dispatch function.
 export default function useGlobalReducer() {
     const { dispatch, store } = useContext(StoreContext)
