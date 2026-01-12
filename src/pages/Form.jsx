@@ -2,15 +2,16 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { editContact } from "../Services/APIServices";
-import { useNavigate } from "react-router-dom";  
+import { useNavigate } from "react-router-dom";
+import { addContact } from "../Services/APIServices.js";
 
 
 
 export const Form = () => {
 
-    const {store, dispatch} = useGlobalReducer()
+    const { store, dispatch } = useGlobalReducer()
 
-    const {id} = useParams()
+    const { id } = useParams()
 
     const navigate = useNavigate()
 
@@ -33,8 +34,8 @@ export const Form = () => {
         })
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();  
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
         if (!contact.name || !contact.email || !contact.phone || !contact.address) {
             setAlert(true);
@@ -42,31 +43,56 @@ export const Form = () => {
             return;
         }
 
-        // TODO: petición al API para agrgar o editar el contacto
-        if(editing){
-            editContact(contact, navigate, dispatch)
+        try {
+            if (editing) {
+                await editContact(contact, dispatch,);  // Añade await + id
+            } else {
+                await addContact(dispatch, contact);  // ← AQUÍ LA LLAMADA FALTANTE
+                await dispatch({ type: 'GET_CONTACTS' });  // Recarga lista (o llama getContacts)
+            }
+            navigate("/");  // ← Navega a Home actualizada
+        } catch (error) {
+            console.error("Error:", error);
+            setAlert(true);
+            setTimeout(() => setAlert(false), 2000);
         }
+
+
+        // TODO: petición al API para agrgar o editar el contacto
+        // if(editing){
+        //     editContact(contact, navigate, dispatch)
+        // }
         //por hacer: que pasa si yo no estoy editando. funcion crear contacto, esa funcion recibe algo, etc
         //La comunicacion esta en API y cuando se cree debe navegar al Home 
         //Cuando se le da ok al modal de delete el boton debe tener un onclick con peticion a la api para eliminar contacto con id y cuando tenga respuesta se actualiza
     }
 
-    const contactEdit = () => {
-        const contactFinded = store.contacts.find(contact => {
+    // const contactEdit = () => {
+    //     const contactFinded = store.contacts.find(contact => {
 
-            
-            return contact.id ===  Number(id)
-    })
-       console.log(contactFinded);
-       setContact(contactFinded)
-    }
+
+    //         return contact.id ===  Number(id)
+    // })
+    //    console.log(contactFinded);
+    //    setContact(contactFinded)
+    // }
+    const contactEdit = () => {
+        const contactFinded = store.contacts.find(contact => contact.id == id);  // == loose para string/number
+        if (!contactFinded) {
+            console.error("Contacto no encontrado, id:", id);
+            navigate("/");  // Vuelve si no existe
+            return;
+        }
+        console.log("Edit contact:", contactFinded);
+        setContact(contactFinded);
+    };
 
     useEffect(() => {
         if (id) {
             console.log("estoy editando");
             setEditing(true)
             contactEdit()
-        }else{
+        } else {
             console.log("Estoy creando el contacto nuevo");
             setEditing(false)
         }
@@ -115,7 +141,10 @@ export const Form = () => {
                     value={contact?.address || ""} //value={contact.address}
                     onChange={handleInputsChange}
                 />
-                <button type="submit" className="btn btn-success w-100">Salvar</button>
+
+                <button type="button" className="btn btn-danger btn-lg px-4 py-1 shadow-sm" onClick={() => navigate("/")}> <i className="fas fa-times me-1"></i> Cancelar </button>
+                <button type="submit" className="btn btn-success btn-lg px-4 py-1 shadow-sm"><i className="fas fa-save me-2"></i>Salvar</button>
+
             </form>
         </div>
 

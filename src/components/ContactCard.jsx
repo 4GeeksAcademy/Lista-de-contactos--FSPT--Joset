@@ -1,15 +1,23 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { Link } from "react-router-dom";
+import { deleteContact } from "../Services/APIServices.js";  // ← AÑADE ESTA LÍNEA
+
 
 
 export const ContactCard = ({ contact }) => {
   const { store, dispatch } = useGlobalReducer();
 
-  const handleDelete = () => {
-    if (confirm(`¿Eliminar a ${contact.name}?`)) {
-      dispatch({ type: 'DELETE_CONTACT', payload: contact.id });
-    }
-  };
+
+  const handleDelete = async () => {
+  if (confirm(`¿Eliminar a ${contact.name}?`)) {
+    await deleteContact(contact.id, dispatch);  
+  }
+};
+  // const handleDelete = () => {
+  //   if (confirm(`¿Eliminar a ${contact.name}?`)) {
+  //     dispatch({ type: 'DELETE_CONTACT', payload: contact.id });
+  //   }
+  // };
 
   return (
     <li className="row contact list-unstyled">
