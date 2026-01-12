@@ -1,5 +1,5 @@
 export const getContacts = async (dispatch) => {
-
+  
   const response = await 
   fetch( `https://playground.4geeks.com/contact/agendas/Amigos/contacts`);
   console.log(response);
@@ -7,12 +7,13 @@ export const getContacts = async (dispatch) => {
     createAgenda();
     return;
   }
+
   const data = await response.json();
   console.log(data);
   dispatch({ type: "set_contacts", payload: data.contacts });
 };
 
-const createAgenda = async (params) => {
+export const createAgenda = async (params) => {
   const response = await fetch(
     `https://playground.4geeks.com/contact/agendas/Amigos`,
     {
@@ -25,22 +26,27 @@ const createAgenda = async (params) => {
 //editarContact
 //eliminarContact
 
-const addContact = async (dispatch, contact) => {
+export const addContact = async (dispatch, contact) => {
   const response = await fetch(
     `https://playground.4geeks.com/contact/agendas/Amigos/contacts`,
     {
       method: "POST",
-      body: JSON.stringify(contact),
       headers: {
         "Content-Type":"application/json"
-      }
+      },
+      body: JSON.stringify(contact)
     })
-    const data = responde.json()
-    getContacts(dispatch)
+
+    if(!response.ok) {
+      alert("Error creando el contacto")
+      return 
+    }
+    const data = await response.json();
+    dispatch({ type: "add_contacts", payload: data});
 };
 
-export const editarContact = async (contact) => {
-  const responde = await fetch(`https://playground.4geeks.com/contact/agendas/Amigos/contacts/${contact.id}`, {
+export const editContact = async (contact, navigate, dispatch) => {
+  const response = await fetch(`https://playground.4geeks.com/contact/agendas/Amigos/contacts/${contact.id}`, {
     method: "PUT", 
     body: JSON.stringify(contact),
     headers: {
@@ -49,5 +55,6 @@ export const editarContact = async (contact) => {
   })
   const data = await response.json()
   console.log(data);
-  
+  await getContacts(dispatch);
+  navigate("/")
 }

@@ -17,7 +17,7 @@ export function StoreProvider({ children }) {
     return <StoreContext.Provider value={{ store, dispatch }}>
         {children}
     </StoreContext.Provider>
-}
+};
  
 // Custom hook to access the global state and dispatch function.
 export default function useGlobalReducer() {

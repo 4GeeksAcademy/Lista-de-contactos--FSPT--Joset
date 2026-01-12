@@ -3,6 +3,7 @@ import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 import { getContacts } from "../Services/APIServices.js";
 import { ContactCard } from "../components/ContactCard.jsx";
 
+
 export const Home = () => { 
 
 
@@ -22,12 +23,10 @@ export const Home = () => {
 				{
 					store.contacts.map(contact => {
 						return (
-							< ContactCard contact={contact} key={contact.id}/>
+							<ContactCard contact={contact} key={contact.id}/>
 						)
-					})
-				}
+					})}
 			</div>
-            
         </div>
     );
 };
