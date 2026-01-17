@@ -9,9 +9,7 @@ export const Home = () => {
     useEffect(() => {
         getContacts(dispatch); 
     }, []);
-    // useEffect(() => {
-    //     getContacts(dispatch);
-    // }, []);
+   
 
     const contacts = store.contacts || [];
 
@@ -26,6 +24,4 @@ export const Home = () => {
     );
 };
 
-{
-    /* <button onClick={() => createContact(dispatch, contact)}>Agregar contacto</button> */
-}
+

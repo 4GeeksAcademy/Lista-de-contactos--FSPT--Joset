@@ -1,22 +1,4 @@
 export const initialStore = () => ({
-  message: null,
-  todos: [
-    {
-      id: 1,
-      title: "Hacer la cama",
-      background: null,
-    },
-    {
-      id: 2,
-      title: "Hacer la tarea",
-      background: null,
-    },
-    {
-      id: 3,
-      title: "Hacer la comida",
-      background: null,
-    }
-  ],
   contacts: []
 });
 

@@ -1,6 +1,6 @@
 import useGlobalReducer from "../hooks/useGlobalReducer";
 import { Link } from "react-router-dom";
-import { deleteContact } from "../Services/APIServices.js";  // ← AÑADE ESTA LÍNEA
+import { deleteContact } from "../Services/APIServices.js";  
 
 
 
@@ -65,7 +65,7 @@ export const ContactCard = ({ contact }) => {
               type="button"
               className="btn p-0 border-0 bg-transparent"
               data-bs-toggle="modal"
-              data-bs-target={`#modal-${contact.id}`} //data-bs-target={`modal.${contact.id}`}
+              data-bs-target={`#modal-${contact.id}`} 
               aria-label={`Delete ${contact.name}`}
             >
               <i className="fa-regular fa-trash-can"></i>
